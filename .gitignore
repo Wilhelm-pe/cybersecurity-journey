@@ -1,0 +1,10 @@
+# Private: real cases still open, raw scans, anything with real hosts/IPs
+drafts/
+*.pcap
+*.pcapng
+*.nmap
+*.gnmap
+*.xml
+.env
+*.key
+*.pem
