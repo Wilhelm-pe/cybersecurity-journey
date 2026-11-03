@@ -46,3 +46,20 @@ the **origin server**, and `whois` shows the hosting provider.
 One unproxied subdomain referenced in a site's JavaScript is enough to reveal the
 origin IP: **DevTools → find API host in JS → `dig` → `whois`**. That is passive
 recon: no attack, only public information chained together.
+
+## Finding the origin behind a CDN (and why the proxy alone is not enough)
+
+If every hostname is proxied, `dig` only returns CDN IPs. Attackers still find
+the origin through:
+
+| Technique | How it works | What actually protects |
+|---|---|---|
+| Forgotten subdomain | List subdomains from certificate logs (`crt.sh`, query `%.example.com`), then `dig` each one | Proxy **every** record that points to the origin |
+| DNS history | Services like SecurityTrails keep the IP a name had *before* it was proxied | Origin firewall (the old IP is still the same server) |
+| Internet-wide scanning | Censys / Shodan connect to every IPv4 and record the TLS certificate; an origin serving `example.com`'s cert gets linked to the name | Origin firewall allowing only the CDN's IP ranges |
+| Email headers | Mail sent directly from the server carries its IP | Send mail through an external provider |
+| MX / TXT (SPF) records | Sometimes list the origin IP | Review those records |
+
+**Takeaway:** hiding the IP is not a security control once it has leaked.
+The control is the firewall: the attacker may know the IP, but the server only
+answers the CDN.

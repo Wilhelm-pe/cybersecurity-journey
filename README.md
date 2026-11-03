@@ -39,3 +39,4 @@ Platforms: TryHackMe (Pre Security path), OverTheWire (Bandit), OWASP Juice Shop
 |---|---|
 | 2026-11-03 | Installed Kali Linux in VirtualBox (manual partitioning, GRUB). Started OWASP Juice Shop in Docker as a local target. |
 | 2026-11-03 | Passive recon of my own infrastructure: DevTools, `dig`, `whois`, `nmap`. Learned to tell a CDN edge from the origin server and to read false positives in directory brute forcing. |
+| 2026-11-03 | Studied how origin IPs leak behind a CDN (forgotten subdomains, certificate transparency, DNS history, Censys/Shodan) and why an origin firewall matters more than hiding the IP. |
