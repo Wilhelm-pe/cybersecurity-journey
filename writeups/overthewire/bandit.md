@@ -16,4 +16,10 @@ ssh bandit0@bandit.labs.overthewire.org -p 2220
 
 | Level | Concept |
 |---|---|
-| 0 → 1 | `ls`, `cat`; reading a file in the home directory |
+| 0 → 1 | `ls`, `cat`; read a file in the home directory |
+| 1 → 2 | file named `-`; `cat ./-` (a leading `-` would look like a command option) |
+| 2 → 3 | filename with spaces; quote or escape it: `cat "spaces in this filename"` |
+| 3 → 4 | hidden file in a folder; `ls -a`, then `cat` the dotfile |
+| 4 → 5 | only one human-readable file among many; `file ./*` tells text from binary |
+| 5 → 6 | find by properties: `find . -size 1033c ! -executable`. In `1033c` the `c` means **bytes**; without it, `find` counts 512-byte blocks |
+| 6 → 7 | search the whole system by owner/group/size: `find / -user bandit7 -group bandit6 -size 33c 2>/dev/null` (`2>/dev/null` hides permission-denied noise) |
