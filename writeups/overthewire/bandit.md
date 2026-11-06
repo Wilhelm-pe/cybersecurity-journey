@@ -28,6 +28,20 @@ ssh bandit0@bandit.labs.overthewire.org -p 2220
 | 9 → 10 | readable text hidden in a binary file: `strings data.txt \| grep "=="` (`strings` keeps only printable sequences) |
 | 10 → 11 | Base64 is an **encoding, not encryption**: anyone can reverse it with `base64 -d data.txt`. Commands read a file directly, no need to copy and paste |
 
+## Extra: what if the file has more than Base64?
+
+`base64 -d` does **not** find the Base64 part; it tries to decode the whole input. With normal text mixed in:
+
+```bash
+base64 -d mixed.txt        # error: invalid input (commas, spaces, "!" are not in the alphabet)
+base64 -d -i mixed.txt     # still fails: ordinary letters ARE valid Base64 characters, so the text gets glued in
+grep -oE '^[A-Za-z0-9+/]{16,}={0,2}$' mixed.txt | base64 -d   # works: filter first, then decode
+```
+
+- `[A-Za-z0-9+/]` is the 64-character alphabet; `{16,}` skips short words; `={0,2}` allows the padding; `^...$` means the whole line.
+- Pattern: **filter first, transform after** (same idea as `strings | grep` in level 9).
+- Looking like Base64 is not proof: a long plain word also matches. Use context (length, `=` padding, where it appeared).
+
 ## Takeaways so far
 
 - Pipes (`|`) chain small tools: each one does one job (`sort`, `uniq`, `grep`, `strings`).
